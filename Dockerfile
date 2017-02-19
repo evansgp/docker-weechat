@@ -1,14 +1,18 @@
-FROM ubuntu:latest
+FROM alpine
 MAINTAINER Gareth Evans <evans.g.p@gmail.com>
 
-RUN apt-get update -y
-RUN apt-get install -y weechat
+RUN apk update \
+    && apk upgrade
+
+RUN apk add weechat\
+    bash\
+    && rm -rf /var/cache/apk/*
 
 ENV LANG C.UTF-8
 
 ENV HOME /weechat
 RUN addgroup weechat \
-    && useradd -d $HOME -m -g weechat -s /bin/bash weechat
+    && adduser -D -h $HOME -s /bin/bash -G weechat weechat
 USER weechat
 
 RUN mkdir -p $HOME/.weechat
